@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "8108991148",
+    "project_id": "jobs-finder-1aa95",
+    "storage_bucket": "jobs-finder-1aa95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8108991148:android:74b39d00c8556700d2f509",
+        "android_client_info": {
+          "package_name": "com.jobsfinder.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdyCOeMXKQ9DX47BHmFyvTGg5EwhjGyKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
