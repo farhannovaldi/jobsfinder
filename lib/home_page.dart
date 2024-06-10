@@ -67,36 +67,42 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListTile(
+              leading: const Icon(Icons.home, color: Colors.white),
               title: const Text('Home', style: TextStyle(color: Colors.white)),
               onTap: () {
                 // Aksi saat item Home ditekan
               },
             ),
             ListTile(
+              leading: const Icon(Icons.account_circle, color: Colors.white), // Ikon yang sama dengan AppBar
               title: const Text('Profile', style: TextStyle(color: Colors.white)),
               onTap: () {
-                // Aksi saat item Profile ditekan
+                Navigator.pushNamed(context, '/akun'); // Navigasi ke halaman akun
               },
             ),
             ListTile(
+              leading: const Icon(Icons.bookmark, color: Colors.white),
               title: const Text('Saved Jobs', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pushNamed(context, '/saved-jobs');
               },
             ),
             ListTile(
+              leading: const Icon(Icons.work, color: Colors.white),
               title: const Text('My Applications', style: TextStyle(color: Colors.white)),
               onTap: () {
                 // Aksi saat item My Applications ditekan
               },
             ),
             ListTile(
+              leading: const Icon(Icons.info, color: Colors.white),
               title: const Text('About Us', style: TextStyle(color: Colors.white)),
               onTap: () {
                 Navigator.pushNamed(context, '/about');
               },
             ),
             ListTile(
+              leading: const Icon(Icons.logout, color: Colors.white),
               title: const Text('Log Out', style: TextStyle(color: Colors.white)),
               onTap: () {
                 _showLogoutDialog(context);
@@ -163,8 +169,7 @@ class HomePage extends StatelessWidget {
                   items: <String>['Entry Level', 'Mid Level', 'Senior Level']
                       .map((String value) {
                     return DropdownMenuItem<String>(
-                     
-value: value,
+                      value: value,
                       child: Text(value, style: const TextStyle(color: Colors.white)),
                     );
                   }).toList(),
