@@ -12,16 +12,27 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController(); // Added phone controller
+  final TextEditingController _phoneController =
+      TextEditingController(); // Added phone controller
 
   final _formKey = GlobalKey<FormState>();
   bool _isObscurePassword = true;
-  bool _isObscureConfirmPassword = true; // Added obscure state for confirm password
+  bool _isObscureConfirmPassword =
+      true; // Added obscure state for confirm password
   bool _isLoading = false;
   String? _selectedEducation;
-  final List<String> _educationLevels = ['SD', 'SMP', 'SMA', 'D3', 'S1', 'S2', 'S3'];
+  final List<String> _educationLevels = [
+    'SD',
+    'SMP',
+    'SMA',
+    'D3',
+    'S1',
+    'S2',
+    'S3'
+  ];
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -45,7 +56,8 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     if (_passwordController.text != _confirmPasswordController.text) {
-      _showDialog(context, "Kata Sandi Tidak Cocok", "Pastikan kata sandi dan konfirmasi kata sandi cocok.");
+      _showDialog(context, "Kata Sandi Tidak Cocok",
+          "Pastikan kata sandi dan konfirmasi kata sandi cocok.");
       return;
     }
 
@@ -54,7 +66,8 @@ class _RegisterPageState extends State<RegisterPage> {
     });
 
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
       );
@@ -96,7 +109,8 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (e) {
       // Tampilkan pesan log jika terjadi kesalahan
       print('Error saat menyimpan data ke Firestore: $e');
-      _showDialog(context, "Error", "Terjadi kesalahan. Silakan coba lagi nanti.");
+      _showDialog(
+          context, "Error", "Terjadi kesalahan. Silakan coba lagi nanti.");
     } finally {
       setState(() {
         _isLoading = false;
@@ -104,7 +118,8 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  void _showDialog(BuildContext context, String title, String content, {bool navigateToLogin = false}) {
+  void _showDialog(BuildContext context, String title, String content,
+      {bool navigateToLogin = false}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -176,7 +191,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   return null;
                 }),
                 SizedBox(height: 20.0),
-                _buildTextField(_phoneController, 'Nomor Telepon', validator: (value) {
+                _buildTextField(_phoneController, 'Nomor Telepon',
+                    validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Nomor telepon tidak boleh kosong';
                   }
@@ -185,7 +201,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(height: 20.0),
                 _buildDropdownField(),
                 SizedBox(height: 20.0),
-                _buildTextField(_addressController, 'Alamat', validator: (value) {
+                _buildTextField(_addressController, 'Alamat',
+                    validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Alamat tidak boleh kosong';
                   }
@@ -202,7 +219,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, {bool obscureText = false, FormFieldValidator<String>? validator}) {
+  Widget _buildTextField(TextEditingController controller, String label,
+      {bool obscureText = false, FormFieldValidator<String>? validator}) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
@@ -218,7 +236,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     _toggleConfirmPasswordVisibility();
                   }
                 },
-                icon: Icon(obscureText ? Icons.visibility : Icons.visibility_off),
+                icon:
+                    Icon(obscureText ? Icons.visibility : Icons.visibility_off),
               )
             : null, // Show suffix icon only for password fields
       ),
@@ -230,7 +249,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buildPasswordField() {
-    return _buildTextField(_passwordController, 'Password', obscureText: _isObscurePassword, validator: (value) {
+    return _buildTextField(_passwordController, 'Password',
+        obscureText: _isObscurePassword, validator: (value) {
       if (value == null || value.isEmpty) {
         return 'Password tidak boleh kosong';
       }
@@ -242,7 +262,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _buildConfirmPasswordField() {
-    return _buildTextField(_confirmPasswordController, 'Konfirmasi Kata Sandi', obscureText: _isObscureConfirmPassword, validator: (value) {
+    return _buildTextField(_confirmPasswordController, 'Konfirmasi Kata Sandi',
+        obscureText: _isObscureConfirmPassword, validator: (value) {
       if (value == null || value.isEmpty) {
         return 'Konfirmasi kata sandi tidak boleh kosong';
       }

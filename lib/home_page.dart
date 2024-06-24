@@ -60,6 +60,9 @@ class HomePage extends StatelessWidget {
                   'Description: ${job.data()?['description'] ?? 'Deskripsi tidak tersedia'}'),
               SizedBox(height: 8),
               Text('Salary: ${job.data()?['salary'] ?? 'Gaji tidak tersedia'}'),
+              SizedBox(height: 8),
+              Text(
+                  'Experience Level: ${job.data()?['experienceLevel'] ?? 'Level tidak tersedia'}'),
             ],
           ),
           actions: <Widget>[
@@ -142,12 +145,20 @@ class HomePage extends StatelessWidget {
       String jobTitle = job.data()?['title'] ?? 'Tidak ada judul';
       String jobCompany = job.data()?['company'] ?? 'Tidak ada perusahaan';
       String jobLocation = job.data()?['location'] ?? 'Lokasi tidak diketahui';
+      String jobDescription =
+          job.data()?['description'] ?? 'Deskripsi tidak tersedia';
+      String jobSalary = job.data()?['salary'] ?? 'Gaji tidak tersedia';
+      String jobExperienceLevel =
+          job.data()?['experienceLevel'] ?? 'Level tidak tersedia';
 
       FirebaseFirestore.instance.collection('saved_jobs').doc(jobId).set({
         'userId': user.uid,
         'jobTitle': jobTitle,
         'company': jobCompany,
         'location': jobLocation,
+        'description': jobDescription,
+        'salary': jobSalary,
+        'experienceLevel': jobExperienceLevel,
       }).then((value) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -193,7 +204,12 @@ class HomePage extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-            _buildDrawerItem(icon: Icons.home, title: 'Home', onTap: () {}),
+            _buildDrawerItem(
+                icon: Icons.home,
+                title: 'Home',
+                onTap: () {
+                  Navigator.pushNamed(context, '/');
+                }),
             _buildDrawerItem(
                 icon: Icons.account_circle,
                 title: 'Profile',
@@ -255,9 +271,6 @@ class HomePage extends StatelessWidget {
                     hintText: 'Location',
                     items: ['Location 1', 'Location 2', 'Location 3']),
                 _buildDropdownButton(
-                    hintText: 'Industry',
-                    items: ['Industry 1', 'Industry 2', 'Industry 3']),
-                _buildDropdownButton(
                     hintText: 'Experience',
                     items: ['Entry Level', 'Mid Level', 'Senior Level']),
               ],
@@ -289,9 +302,19 @@ class HomePage extends StatelessWidget {
                       child: ListTile(
                         title: Text(job.data()?['title'] ?? 'Tidak ada judul',
                             style: const TextStyle(color: Colors.white)),
-                        subtitle: Text(
-                            job.data()?['company'] ?? 'Tidak ada perusahaan',
-                            style: TextStyle(color: Colors.white54)),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                job.data()?['company'] ??
+                                    'Tidak ada perusahaan',
+                                style: TextStyle(color: Colors.white54)),
+                            SizedBox(height: 4),
+                            Text(
+                                'Experience: ${job.data()?['experienceLevel'] ?? 'Level tidak tersedia'}',
+                                style: TextStyle(color: Colors.white54)),
+                          ],
+                        ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
