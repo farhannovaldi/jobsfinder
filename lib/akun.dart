@@ -39,6 +39,26 @@ class _AkunPageState extends State<AkunPage> {
     }
   }
 
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Berhasil'),
+          content: Text('CV berhasil diupload.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _uploadCV() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom, allowedExtensions: ['pdf', 'doc', 'docx']);
@@ -66,11 +86,67 @@ class _AkunPageState extends State<AkunPage> {
           setState(() {
             userData!['cvUrl'] = downloadURL;
           });
+
+          _showSuccessDialog(); // Show success dialog
         });
       } else {
         // Handle case where fileBytes is null
         print('File is null or cannot be read.');
       }
+    }
+  }
+
+  Future<void> _showDeleteConfirmationDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Konfirmasi Hapus CV'),
+          content: Text('Apakah Anda yakin ingin menghapus CV ini?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Batal'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue, // Text color
+              ),
+            ),
+            TextButton(
+              child: Text('Hapus'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _deleteCV();
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red, // Text color
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _deleteCV() async {
+    if (userData!['cvUrl'] != null) {
+      // Get reference to the file to be deleted
+      Reference storageRef =
+          FirebaseStorage.instance.refFromURL(userData!['cvUrl']);
+
+      // Delete the file
+      await storageRef.delete();
+
+      // Update Firestore document to remove the CV URL
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .update({'cvUrl': FieldValue.delete()});
+
+      setState(() {
+        userData!['cvUrl'] = null;
+      });
     }
   }
 
@@ -129,9 +205,17 @@ class _AkunPageState extends State<AkunPage> {
                               _buildUserInfo('Pendidikan Terakhir',
                                   userData!['education']),
                               Divider(),
-                              userData!['cvUrl'] != null
-                                  ? _buildCVInfo('CV', userData!['cvUrl'])
-                                  : Container(),
+                              if (userData!['cvUrl'] != null)
+                                Column(
+                                  children: [
+                                    _buildCVInfo('CV', userData!['cvUrl']),
+                                    IconButton(
+                                      icon: Icon(Icons.delete),
+                                      onPressed: _showDeleteConfirmationDialog,
+                                      tooltip: 'Hapus CV',
+                                    ),
+                                  ],
+                                ),
                             ],
                           ),
                         ),
