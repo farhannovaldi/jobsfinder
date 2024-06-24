@@ -3,8 +3,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:jobsfinder/login.dart';
 import 'firebase_options.dart';
 import 'about.dart';
-import 'home_page.dart'; // Import halaman utama
-import 'akun.dart'; // Import halaman akun
+import 'home_page.dart';
+import 'akun.dart';
+import 'application.dart';
+import 'saved_jobs.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -58,9 +60,11 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginPage(),
-        '/home': (context) => HomePage(), // Tambahkan rute untuk halaman utama
+        '/home': (context) => HomePage(),
         '/about': (context) => AboutPage(),
-        '/akun': (context) => AkunPage(), // Tambahkan rute untuk halaman akun
+        '/akun': (context) => AkunPage(),
+        '/aplikasi': (context) => ApplicationsPage(),
+        '/saved-jobs': (context) => SavedJobsPage(),
       },
     );
   }
